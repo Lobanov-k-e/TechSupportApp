@@ -30,7 +30,7 @@ namespace TechSupportApp.Domain.Models
             TicketStatus = TicketStatus.Closed;
         }
 
-        public Ticket Create(string body, string issuer)
+        public static Ticket Create(string body, string issuer)
         {
             return new Ticket()
             { 

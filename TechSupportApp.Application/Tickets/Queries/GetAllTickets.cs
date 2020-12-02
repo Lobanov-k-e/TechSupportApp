@@ -2,10 +2,14 @@
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using TechSupportApp.Domain.Models;
+[assembly: InternalsVisibleTo("TechSupportApp.Tests")]
+
+
 
 namespace TechSupportApp.Application.Tickets.Queries
 {
@@ -13,6 +17,7 @@ namespace TechSupportApp.Application.Tickets.Queries
     {
     }
 
+    //не возвращать доменный объект, использовать автомэпер
     internal class GetAllTicketsHandler : IRequestHandler<GetAllTickets, IEnumerable<Ticket>>
     {
         private readonly IAppContext _context;

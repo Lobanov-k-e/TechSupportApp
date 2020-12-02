@@ -8,9 +8,9 @@ using TechSupportApp.Domain.Models;
 
 namespace TechSupportApp.Application
 {
-    interface IAppContext
+    public interface IAppContext
     {
         DbSet<Ticket> Tickets { get; set; }
-        Task SaveChangesAsync(CancellationToken cancellationToken);       
+        Task<int> SaveChangesAsync(CancellationToken cancellationToken);       
     }
 }
