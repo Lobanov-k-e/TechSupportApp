@@ -3,17 +3,19 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.29926.136
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TechSupportApp.WebApi", "TechSupportApp\TechSupportApp.WebApi.csproj", "{66478C26-346D-4EBB-B056-A1B8431C801E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TechSupportApp.WebApi", "TechSupportApp\TechSupportApp.WebApi.csproj", "{66478C26-346D-4EBB-B056-A1B8431C801E}"
 	ProjectSection(ProjectDependencies) = postProject
 		{CCD8A22F-A8E8-46C8-B5F9-FD2516196184} = {CCD8A22F-A8E8-46C8-B5F9-FD2516196184}
 		{F229D95B-2A99-4B18-BBA9-66F3ED1709CA} = {F229D95B-2A99-4B18-BBA9-66F3ED1709CA}
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TechSupportApp.Domain", "TechSupportApp.Domain\TechSupportApp.Domain.csproj", "{7BE43319-E713-4BD7-B0FB-2F1BA0EE5197}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TechSupportApp.Domain", "TechSupportApp.Domain\TechSupportApp.Domain.csproj", "{7BE43319-E713-4BD7-B0FB-2F1BA0EE5197}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TechSupportApp.Application", "TechSupportApp.Application\TechSupportApp.Application.csproj", "{CCD8A22F-A8E8-46C8-B5F9-FD2516196184}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TechSupportApp.Application", "TechSupportApp.Application\TechSupportApp.Application.csproj", "{CCD8A22F-A8E8-46C8-B5F9-FD2516196184}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TechSupportApp.Infrastructure", "TechSupportApp.Infrastructure\TechSupportApp.Infrastructure.csproj", "{F229D95B-2A99-4B18-BBA9-66F3ED1709CA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TechSupportApp.Infrastructure", "TechSupportApp.Infrastructure\TechSupportApp.Infrastructure.csproj", "{F229D95B-2A99-4B18-BBA9-66F3ED1709CA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TechSupportApp.Tests", "TechSupportApp.Tests\TechSupportApp.Tests.csproj", "{3C5D003F-3F87-462A-A821-C10F538C4D85}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -37,6 +39,10 @@ Global
 		{F229D95B-2A99-4B18-BBA9-66F3ED1709CA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F229D95B-2A99-4B18-BBA9-66F3ED1709CA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F229D95B-2A99-4B18-BBA9-66F3ED1709CA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3C5D003F-3F87-462A-A821-C10F538C4D85}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3C5D003F-3F87-462A-A821-C10F538C4D85}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3C5D003F-3F87-462A-A821-C10F538C4D85}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3C5D003F-3F87-462A-A821-C10F538C4D85}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
