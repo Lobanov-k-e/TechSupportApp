@@ -6,11 +6,11 @@ using System.Threading;
 using System.Threading.Tasks;
 using TechSupportApp.Domain.Models;
 
-namespace TechSupportApp.Application
+namespace TechSupportApp.Application.Interfaces
 {
     public interface IAppContext
     {
         DbSet<Ticket> Tickets { get; set; }
-        Task<int> SaveChangesAsync(CancellationToken cancellationToken);       
+        Task<int> SaveChangesAsync(CancellationToken cancellationToken = new CancellationToken());       
     }
 }
