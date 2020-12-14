@@ -9,8 +9,10 @@ namespace TechSupportApp.Domain.Models
     public class Ticket : AuditableEntity
     {
         public int Id { get; set; }
-        public string Body { get; set; }
-
+        //to-do issue enity 
+        public string Issue { get; set; }
+        public string Solution { get; set; }
+        //to-do user entity
         public string Issuer { get; set; }
 
         public TicketStatus TicketStatus { get; set; }
@@ -30,12 +32,12 @@ namespace TechSupportApp.Domain.Models
             TicketStatus = TicketStatus.Closed;
         }
 
-        public static Ticket Create(string body, string issuer)
+        public static Ticket Create(string issue, string issuer)
         {
             return new Ticket()
             { 
                 Issuer = issuer,
-                Body = body 
+                Issue = issue 
             };
         }
     }
