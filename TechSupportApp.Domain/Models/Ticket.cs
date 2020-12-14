@@ -37,7 +37,7 @@ namespace TechSupportApp.Domain.Models
             return new Ticket()
             { 
                 Issuer = issuer,
-                Issue = issue 
+                Issue = issue,                
             };
         }
     }

@@ -46,13 +46,13 @@ namespace TechSupportApp.Tests.Application.Tickets.Commands
 
             var result = await _contex.Tickets.FindAsync(ticketId);
 
-            StringAssert.AreEqualIgnoringCase(command.Content, result.Issue);
+            StringAssert.AreEqualIgnoringCase(command.Issue, result.Issue);
             StringAssert.AreEqualIgnoringCase(command.Issuer, result.Issuer);
         }
 
         private static CreateTicket CreateCommand()
         {
-           return new CreateTicket() { Content = "testContent", Issuer = "testIssuer" };
+           return new CreateTicket() { Issue = "testContent", Issuer = "testIssuer" };
         }
     }
 }

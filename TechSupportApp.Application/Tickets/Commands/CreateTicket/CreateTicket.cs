@@ -10,7 +10,7 @@ namespace TechSupportApp.Application.Tickets.Commands.CreateTicket
     public class CreateTicket : IRequest<Ticket>
     {
         public string Issuer { get; set; }
-        public string Content { get; set; }
+        public string Issue { get; set; }
     }
 
     internal class CreateTicketRequestHandler : IRequestHandler<CreateTicket, Ticket>
@@ -23,7 +23,7 @@ namespace TechSupportApp.Application.Tickets.Commands.CreateTicket
         }
         public async Task<Ticket> Handle(CreateTicket request, CancellationToken cancellationToken)
         {
-            var ticket = Ticket.Create(request.Content, request.Issuer);
+            var ticket = Ticket.Create(request.Issue, request.Issuer);
             _context.Tickets.Add(ticket);
             await _context.SaveChangesAsync();
             return ticket;
