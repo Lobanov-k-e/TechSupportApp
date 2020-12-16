@@ -81,7 +81,7 @@ namespace TechSupportApp.Infrastructure.Migrations
 
                     b.HasIndex("TicketId");
 
-                    b.ToTable("TicketEntry");
+                    b.ToTable("TicketEntries");
                 });
 
             modelBuilder.Entity("TechSupportApp.Domain.Models.TicketEntry", b =>

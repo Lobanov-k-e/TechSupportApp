@@ -18,6 +18,7 @@ namespace TechSupportApp.Infrastructure
 
 
         public DbSet<Ticket> Tickets { get; set; }
+        public DbSet<TicketEntry> TicketEntries { get; set; }
 
         public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = new CancellationToken() )
         {

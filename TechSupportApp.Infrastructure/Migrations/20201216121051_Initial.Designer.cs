@@ -10,8 +10,8 @@ using TechSupportApp.Infrastructure;
 namespace TechSupportApp.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationContext))]
-    [Migration("20201216114032_TicketEntry")]
-    partial class TicketEntry
+    [Migration("20201216121051_Initial")]
+    partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -83,7 +83,7 @@ namespace TechSupportApp.Infrastructure.Migrations
 
                     b.HasIndex("TicketId");
 
-                    b.ToTable("TicketEntry");
+                    b.ToTable("TicketEntries");
                 });
 
             modelBuilder.Entity("TechSupportApp.Domain.Models.TicketEntry", b =>

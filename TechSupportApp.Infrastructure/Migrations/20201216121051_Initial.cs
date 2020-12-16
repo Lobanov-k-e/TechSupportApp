@@ -3,20 +3,30 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace TechSupportApp.Infrastructure.Migrations
 {
-    public partial class TicketEntry : Migration
+    public partial class Initial : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropColumn(
-                name: "Issue",
-                table: "Tickets");
-
-            migrationBuilder.DropColumn(
-                name: "Solution",
-                table: "Tickets");
+            migrationBuilder.CreateTable(
+                name: "Tickets",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Issuer = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    TicketStatus = table.Column<int>(type: "int", nullable: false),
+                    CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Created = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    LastModifiedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    LastModified = table.Column<DateTime>(type: "datetime2", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Tickets", x => x.Id);
+                });
 
             migrationBuilder.CreateTable(
-                name: "TicketEntry",
+                name: "TicketEntries",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
@@ -31,9 +41,9 @@ namespace TechSupportApp.Infrastructure.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_TicketEntry", x => x.Id);
+                    table.PrimaryKey("PK_TicketEntries", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_TicketEntry_Tickets_TicketId",
+                        name: "FK_TicketEntries_Tickets_TicketId",
                         column: x => x.TicketId,
                         principalTable: "Tickets",
                         principalColumn: "Id",
@@ -41,27 +51,18 @@ namespace TechSupportApp.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_TicketEntry_TicketId",
-                table: "TicketEntry",
+                name: "IX_TicketEntries_TicketId",
+                table: "TicketEntries",
                 column: "TicketId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "TicketEntry");
+                name: "TicketEntries");
 
-            migrationBuilder.AddColumn<string>(
-                name: "Issue",
-                table: "Tickets",
-                type: "nvarchar(max)",
-                nullable: true);
-
-            migrationBuilder.AddColumn<string>(
-                name: "Solution",
-                table: "Tickets",
-                type: "nvarchar(max)",
-                nullable: true);
+            migrationBuilder.DropTable(
+                name: "Tickets");
         }
     }
 }
