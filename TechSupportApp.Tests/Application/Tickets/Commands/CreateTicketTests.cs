@@ -32,17 +32,17 @@ namespace TechSupportApp.Tests.Application.Tickets.Commands
 
             var result = await handler.Handle(command, new CancellationToken());
 
-            Assert.IsNotNull(await _contex.Tickets.FindAsync(result.Id));
+            Assert.IsNotNull(await _contex.Tickets.FindAsync(result));
             Assert.AreEqual(ticketCount + 1, await _contex.Tickets.CountAsync());
         }
 
         [Test]
-        public async Task CreateTicket_creates_CorrectTask()
+        public async Task CreateTicket_creates_CorrectTicket()
         {
             var command = CreateCommand();
             var handler = new CreateTicketRequestHandler(_contex);           
 
-            int ticketId = (await handler.Handle(command, new CancellationToken() )).Id;
+            int ticketId = await handler.Handle(command, new CancellationToken() );
 
             var result = await _contex.Tickets.FindAsync(ticketId);
 

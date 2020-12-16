@@ -7,13 +7,13 @@ using TechSupportApp.Domain.Models;
 
 namespace TechSupportApp.Application.Tickets.Commands.CreateTicket
 {
-    public class CreateTicket : IRequest<Ticket>
+    public class CreateTicket : IRequest<int>
     {
         public string Issuer { get; set; }
         public string Issue { get; set; }
     }
 
-    internal class CreateTicketRequestHandler : IRequestHandler<CreateTicket, Ticket>
+    internal class CreateTicketRequestHandler : IRequestHandler<CreateTicket, int>
     {
         private readonly IAppContext _context;
 
@@ -21,12 +21,12 @@ namespace TechSupportApp.Application.Tickets.Commands.CreateTicket
         {
             _context = context ?? throw new ArgumentNullException(nameof(context));
         }
-        public async Task<Ticket> Handle(CreateTicket request, CancellationToken cancellationToken)
+        public async Task<int> Handle(CreateTicket request, CancellationToken cancellationToken)
         {
             var ticket = Ticket.Create(request.Issue, request.Issuer);
             _context.Tickets.Add(ticket);
             await _context.SaveChangesAsync();
-            return ticket;
+            return ticket.Id;
         }
     }
 }

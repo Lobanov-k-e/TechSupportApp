@@ -1,7 +1,4 @@
 ﻿@model TechSupportApp.Application.Tickets.Queries.GetAllTickets.GetAllTicketsVm
-@{
-    ViewData["Title"] = "Index";
-}
 
 <table>
     @foreach (var ticket in Model.Tickets)
@@ -9,7 +6,7 @@
         <tr>
             <td>@ticket.Id</td>
             <td>@ticket.Issuer</td>
-            <td>@ticket.Body</td>
+            <td>@ticket.Issue</td>
             <td>@ticket.TicketStatus</td>
         </tr>
     }

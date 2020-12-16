@@ -6,6 +6,7 @@ using TechSupportApp.Application.Common;
 using TechSupportApp.Application.Interfaces;
 using TechSupportApp.Application.Tickets.Commands.CreateTicket;
 using TechSupportApp.Application.Tickets.Queries.GetAllTickets;
+using TechSupportApp.Application.Tickets.Queries.TicketDetails;
 
 namespace TechSupportApp.WebApi.Controllers
 {
@@ -26,23 +27,29 @@ namespace TechSupportApp.WebApi.Controllers
             return View(tickets);
         }
 
-        public async Task<IActionResult> Create()
+        public IActionResult Create()
         {
             return View();
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create(CreateTicket command)
+        public async Task<IActionResult> Create(CreateTicket request)
         {
             if (ModelState.IsValid)
             {
-                await _mediator.Send(command);
+                await _mediator.Send(request);
                 return Redirect(nameof(Index));
             }
-            return View(command);
-        }     
+            return View(request);
+        }
 
-        public async Task<IActionResult> SeddData()
+        public async Task<IActionResult> Details(TicketDetails request)
+        {
+            return View(await _mediator.Send(request));
+        }
+
+
+        public async Task<IActionResult> SeedData()
         {
             await _mediator.Send(new SeedDataCommand());
             return RedirectToAction(nameof(Index));

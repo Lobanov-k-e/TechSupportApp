@@ -7,7 +7,7 @@ namespace TechSupportApp.Domain.Enums
     public enum TicketStatus
     {
         Open,
-        Accepted,
+        InWork,
         Closed,
     }
 }

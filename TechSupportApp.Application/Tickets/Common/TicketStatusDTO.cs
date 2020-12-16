@@ -1,4 +1,4 @@
-﻿namespace TechSupportApp.Application.Tickets.Queries.GetAllTickets
+﻿namespace TechSupportApp.Application.Tickets
 {
     public class TicketStatusDTO
     {
