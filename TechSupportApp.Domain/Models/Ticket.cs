@@ -10,8 +10,7 @@ namespace TechSupportApp.Domain.Models
     {
         public int Id { get; set; }
         //to-do issue enity 
-        public string Issue { get; set; }
-        public string Solution { get; set; }
+        public ICollection<TicketEntry> Entries { get; set; }
         //to-do user entity
         public string Issuer { get; set; }
 
@@ -20,12 +19,7 @@ namespace TechSupportApp.Domain.Models
         internal Ticket()
         {
             TicketStatus = TicketStatus.Open;
-        }
-
-        public void Accept()
-        {
-            TicketStatus = TicketStatus.Accepted;
-        }
+        }        
 
         public void Close()
         {
@@ -35,9 +29,12 @@ namespace TechSupportApp.Domain.Models
         public static Ticket Create(string issue, string issuer)
         {
             return new Ticket()
-            { 
+            {
                 Issuer = issuer,
-                Issue = issue,                
+                Entries = new List<TicketEntry>() 
+                {
+                    new TicketEntry() { Issue = issue }
+                }
             };
         }
     }
