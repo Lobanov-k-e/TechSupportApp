@@ -25,13 +25,37 @@ namespace TechSupportApp.Domain.Models
         {
             TicketStatus = TicketStatus.Closed;
         }
+       
+
+        public TicketStatus MoveToNextStatus()
+        {
+            if (TicketStatus != TicketStatus.Closed)
+            {
+                TicketStatus += 1;
+            }
+            return TicketStatus;         
+            
+        }
+        public bool AddIssue(string issue)
+        {
+            if (TicketStatus == TicketStatus.InWork)
+            {
+                Entries.Add(new TicketEntry
+                {
+                    Issue = issue
+                });
+                return true;
+            }
+
+            return false;
+        }
 
         public static Ticket Create(string issue, string issuer)
         {
             return new Ticket()
             {
                 Issuer = issuer,
-                Entries = new List<TicketEntry>() 
+                Entries = new List<TicketEntry>()
                 {
                     new TicketEntry() { Issue = issue }
                 }

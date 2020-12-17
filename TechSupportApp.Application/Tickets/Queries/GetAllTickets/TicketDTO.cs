@@ -19,7 +19,7 @@ namespace TechSupportApp.Application.Tickets.Queries.GetAllTickets
                 .ForMember(m => m.TicketStatus, 
                            options => options.MapFrom(s=>(int)s.TicketStatus) )
                 .ForMember(m=>m.LatestIssue,
-                           options => options.MapFrom(s => s.Entries.OrderBy(e => e.Created).LastOrDefault()) );            
+                           options => options.MapFrom(s => s.Entries.OrderBy(e => e.Created).LastOrDefault().Issue) );            
         }
         
     }

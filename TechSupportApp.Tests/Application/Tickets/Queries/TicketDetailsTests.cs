@@ -36,7 +36,7 @@ namespace TechSupportApp.Tests.Application.Tickets.Queries
         }
 
         [Test]
-        public async Task Throws_NotFoundExeprion()
+        public async Task Throws_onWrongIdn()
         {
             const int InvalidId = -1;
             string errorMsg = $"Entity \"Ticket\" ({InvalidId}) was not found.";
@@ -44,7 +44,7 @@ namespace TechSupportApp.Tests.Application.Tickets.Queries
             var handler = new TicketDetailsHandler(_context, GetMapper());            
 
             var act = Assert.ThrowsAsync<NotFoundException>(async() => 
-                    await handler.Handle(query, new System.Threading.CancellationToken()));
+                            await handler.Handle(query, new System.Threading.CancellationToken()));
 
             StringAssert.AreEqualIgnoringCase(errorMsg, act.Message);
         }

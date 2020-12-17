@@ -1,34 +1,40 @@
 ﻿@model TechSupportApp.Application.Tickets.Queries.TicketDetails.TicketDetailsVm
-    <dl class="row">
-        <dt class="col-sm-2">
-            Id
-        </dt>
-        <dd class="col-sm-10">
-            @Model.Ticket.Id
-        </dd>
-        <dt class="col-sm-2">
-            Issuer
-        </dt>
-        <dd class="col-sm-10">
-            @Model.Ticket.Issuer
-        </dd>
-        <dt class="col-sm-2">
-            Issue
-        </dt>
-        <dd class="col-sm-10">
-            @Model.Ticket.Issue
-        </dd>
-        <dt class="col-sm-2">
-            Solution
-        </dt>
-        <dd class="col-sm-10">
-            @Model.Ticket.Solution
-        </dd>
-        <dt class="col-sm-2">
-            Status
-        </dt>
-        <dd class="col-sm-10">
-            @Model.TicketStatusList.Single(c => c.Value == @Model.Ticket.TicketStatus).Name
-        </dd>
-    </dl>
+<dl class="row">
+    <dt class="col-sm-2">
+        Id
+    </dt>
+    <dd class="col-sm-10">
+        @Model.Ticket.Id
+    </dd>
+    <dt class="col-sm-2">
+        Issuer
+    </dt>
+    <dd class="col-sm-10">
+        @Model.Ticket.Issuer
+    </dd>
 
+    <dt class="col-sm-2">
+        Status
+    </dt>
+    <dd class="col-sm-10">
+        @Model.TicketStatusList.Single(c => c.Value == @Model.Ticket.TicketStatus).Name
+    </dd>
+</dl>
+<table class="table table-bordered table-striped table-sm">
+    <thead>
+        <tr>
+            <th>Issue</th>
+            <th>Solution</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var entry in Model.Ticket.Entries)
+        {
+            <tr>
+                <td>@entry.Issue</td>
+                <td>@entry.Solution</td>
+            </tr>
+        }
+    </tbody>
+</table>
+   
