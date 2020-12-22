@@ -30,7 +30,7 @@ namespace TechSupportApp.Application.Tickets.Commands.AddIssue
             var ticket = await _context.Tickets.FindAsync(request.TicketId) ??
                          throw new NotFoundException(name: nameof(Ticket), key: request.TicketId);
 
-            ticket.AddIssue(request.Issue);
+            ticket.AddNewIssue(request.Issue);
             
             await _context.SaveChangesAsync();
             return Unit.Value;

@@ -7,6 +7,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using TechSupportApp.Application.Common.Exceptions;
 using TechSupportApp.Application.Tickets.Commands.AddIssue;
+using TechSupportApp.Domain.Enums;
 using TechSupportApp.Infrastructure;
 
 namespace TechSupportApp.Tests.Application.Tickets.Commands
@@ -25,7 +26,7 @@ namespace TechSupportApp.Tests.Application.Tickets.Commands
         {
             var ticket = await _context.Tickets.FindAsync(1);
 
-            ticket.TicketStatus = Domain.Enums.TicketStatus.InWork;
+            ticket.TicketStatus = TicketStatus.InWork;
 
             var command = new AddNewIssue
             {
@@ -47,7 +48,7 @@ namespace TechSupportApp.Tests.Application.Tickets.Commands
         {
             var ticket = await _context.Tickets.FindAsync(1);
 
-            ticket.TicketStatus = Domain.Enums.TicketStatus.Open;
+            ticket.TicketStatus = TicketStatus.Open;
 
             var command = new AddNewIssue
             {
@@ -59,7 +60,7 @@ namespace TechSupportApp.Tests.Application.Tickets.Commands
 
             await new AddNewIssueRequestHandler(_context).Handle(command, new CancellationToken());
 
-            ticket.TicketStatus = Domain.Enums.TicketStatus.Closed;
+            ticket.TicketStatus = TicketStatus.Closed;
             await new AddNewIssueRequestHandler(_context).Handle(command, new CancellationToken());
 
             var actual = await _context.Tickets.FindAsync(1);
