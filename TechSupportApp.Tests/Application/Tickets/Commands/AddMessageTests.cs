@@ -13,36 +13,36 @@ using TechSupportApp.Application.Common.Exceptions;
 namespace TechSupportApp.Tests.Application.Tickets.Commands
 {
     [TestFixture]
-    class AddSolutionTests
+    class AddMessageTests
     {
         IAppContext _context;
-        public AddSolutionTests()
+        public AddMessageTests()
         {
             _context = DBContextFactory.Create();
         }
 
         [Test]
-        public async Task CanAddSolution()
+        public async Task CanAddMessage()
         {
-            var ticket = await _context.Tickets.FirstAsync();
-            var issue = ticket.Entries.First();
-            const string expected = "test solution";
+            var ticket = await _context.Tickets.FirstAsync();          
+            const string expected = "test message";
 
-            var command = new AddSolution { TicketId = ticket.Id, IssueId = issue.Id, Solution = expected };
+            var command = new AddMessage { TicketId = ticket.Id, Content = expected };
 
-            await new AddSolutionHandler(_context).Handle(command, new CancellationToken());
+            await new AddMessageHandler(_context).Handle(command, new CancellationToken());
 
-            var actual = (await _context.Tickets.FindAsync(ticket.Id)).Entries.SingleOrDefault(e => e.Id == command.IssueId);
+            var actual = (await _context.Tickets.FindAsync(ticket.Id)).Track.SingleOrDefault(t=>t.Content == expected);
 
-            StringAssert.AreEqualIgnoringCase(expected, actual.Solution);            
+            //can assert.notnull
+            StringAssert.AreEqualIgnoringCase(expected, actual.Content);            
         }
 
         [Test]
         public void Throws_onWrongTicketId()
         {
             const int WrongId = -1;
-            var command = new AddSolution { TicketId = WrongId, IssueId = 1, Solution = " " };
-            var handler = new AddSolutionHandler(_context);
+            var command = new AddMessage { TicketId = WrongId, Content = " "};
+            var handler = new AddMessageHandler(_context);
 
             string errorMsg = $"Entity \"Ticket\" ({WrongId}) was not found.";
 

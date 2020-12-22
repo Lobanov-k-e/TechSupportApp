@@ -1,8 +1,6 @@
 ﻿using NUnit.Framework;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using TechSupportApp.Domain.Enums;
 using TechSupportApp.Domain.Models;
 
@@ -20,7 +18,7 @@ namespace TechSupportApp.Tests.Domain
             var ticket = Ticket.Create(ExpectedIssue, ExpectedIssuer);
 
             Assert.AreEqual(ExpectedIssuer, ticket.Issuer);
-            Assert.AreEqual(ExpectedIssue, ticket.Entries.First().Issue);
+            Assert.AreEqual(ExpectedIssue, ticket.Issue);
             Assert.AreEqual(TicketStatus.Open, ticket.TicketStatus);
         }
 
@@ -35,79 +33,27 @@ namespace TechSupportApp.Tests.Domain
         }
 
         [Test]
-        public void AddSolution_canAddSolution()
+        public void AddMessage_canAddMessage()
         {
             var ticket = GetTicket();
-            const string ExpectedSolution = "test";
-
-            bool act = ticket.AddSolution(1, ExpectedSolution);
+            const string ExpectedContent = "test";
+            bool act = ticket.AddMessage(ExpectedContent);
 
             Assert.IsTrue(act);
-            Assert.AreEqual(ExpectedSolution, ticket.Entries.First().Solution);
+            Assert.NotNull(ticket.Track.SingleOrDefault(t => t.Content == ExpectedContent));
+
         }
 
         [Test]
-        public void AddSolution_notAddToClosedTicket()
+        public void AddMessage_notAddToClosedTicket()
         {
             var ticket = GetTicket();
             ticket.TicketStatus = TicketStatus.Closed;
 
-            bool act = ticket.AddSolution(1, "test");
+            bool act = ticket.AddMessage("test");
 
-            Assert.IsFalse(act);
-            Assert.IsTrue(string.IsNullOrEmpty(ticket.Entries.First().Solution));
-        }
-
-        [Test]
-        public void AddSolution_falseIfNoIssueId()
-        {
-            var ticket = GetTicket();
-
-            bool act = ticket.AddSolution(-1, "test");
-
-            Assert.IsFalse(act);
-        }
-
-        [Test]
-        public void AddSolution_setCorrectStatus()
-        {
-            var ticket = GetTicket();
-
-            ticket.AddSolution(1, "test");
-
-            Assert.AreEqual(TicketStatus.InWork, ticket.TicketStatus);
-        }
-
-        [Test]
-        public void AddNewIssue_canAdd()
-        {
-            var ticket = GetTicket();
-            ticket.TicketStatus = TicketStatus.InWork;
-            const string ExpectedIssue = "test";
-
-            bool act = ticket.AddNewIssue(ExpectedIssue);
-
-            Assert.IsTrue(act);
-            Assert.IsTrue(ticket.Entries.Count > 1);
-            Assert.NotNull(ticket.Entries.SingleOrDefault(e => e.Issue == ExpectedIssue) );
-        }
-
-        [TestCase(TicketStatus.Open)]
-        [TestCase(TicketStatus.Closed)]
-        public void AddNewIssue_notAddIfWrongTicketStatus(TicketStatus status)
-        {
-            var ticket = GetTicket();
-            ticket.TicketStatus = status;
-
-            bool act = ticket.AddNewIssue("test");
-
-            Assert.IsFalse(act);
-        }
-
-
-
-
-
+            Assert.IsFalse(act);            
+        }          
 
         private static Ticket GetTicket(string ExpectedIssuer = " ", string ExpectedIssue = " ")
         {
@@ -115,11 +61,11 @@ namespace TechSupportApp.Tests.Domain
             {
                 Issuer = ExpectedIssuer,
                 TicketStatus = TicketStatus.Open,
-                Entries = new List<TicketEntry>()
+                Track = new List<TrackEntry>()
                 {
-                    new TicketEntry() { 
+                    new TrackEntry() { 
                         Id = 1,
-                        Issue = ExpectedIssue}
+                        Content = ExpectedIssue}
                 }
             };
         }

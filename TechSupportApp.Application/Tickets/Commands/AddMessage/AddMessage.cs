@@ -12,31 +12,30 @@ using TechSupportApp.Domain.Models;
 
 namespace TechSupportApp.Application.Tickets.Commands
 {
-    public class AddSolution : IRequest
+    public class AddMessage : IRequest
     {
-        public int TicketId { get; set; }
-        public int IssueId { get; set; }
-        public string Solution { get; set; }
+        public int TicketId { get; set; }  
+        public string Content { get; set; }
     }
 
-    internal class AddSolutionHandler : IRequestHandler<AddSolution>
+    internal class AddMessageHandler : IRequestHandler<AddMessage>
     {
         private readonly IAppContext _context;
 
-        public AddSolutionHandler(IAppContext context)
+        public AddMessageHandler(IAppContext context)
         {
             _context = context ?? throw new ArgumentNullException(nameof(context));
         }
-        public async Task<Unit> Handle(AddSolution request, CancellationToken cancellationToken)
+        public async Task<Unit> Handle(AddMessage request, CancellationToken cancellationToken)
         {
             //убрать инклюд, посмотреть что будет
             var ticket = await _context
                 .Tickets
-                .Include(t => t.Entries)
+                .Include(t => t.Track)
                 .SingleOrDefaultAsync(t => t.Id == request.TicketId)
                 ?? throw new NotFoundException(name: nameof(Ticket), request.TicketId);
 
-            ticket.AddSolution(request.IssueId, request.Solution);
+            ticket.AddMessage(request.Content);
 
             await _context.SaveChangesAsync();
 

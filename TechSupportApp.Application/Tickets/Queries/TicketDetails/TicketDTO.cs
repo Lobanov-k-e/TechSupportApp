@@ -21,7 +21,7 @@ namespace TechSupportApp.Application.Tickets.Queries.TicketDetails
                 .ForMember(m => m.TicketStatus,
                            options => options.MapFrom(s => (int)s.TicketStatus))
                 .ForMember(m => m.Entries,
-                           options => options.MapFrom(s=>s.Entries) );
+                           options => options.MapFrom(s=>s.Track) );
             
         }
 

@@ -7,12 +7,15 @@ using System.Runtime.CompilerServices;
 
 namespace TechSupportApp.Domain.Models
 {
+    //coздать интерфейс сервиса, который будет производить доменный объект пользователя на основе пользователя identity.
+    //реализация сервиса - в аппликейшне. пользователя будем получать не из AppContext, а из IdentityContext (один или разные контексты?)
     public class Ticket : AuditableEntity
     {
         public int Id { get; set; }        
-        public ICollection<TicketEntry> Entries { get; set; }
+        public ICollection<TrackEntry> Track { get; set; }
         //to-do user entity
         public string Issuer { get; set; }
+        public string Issue { get; set; }              
         public TicketStatus TicketStatus { get; set; }
         internal Ticket()
         {
@@ -21,41 +24,16 @@ namespace TechSupportApp.Domain.Models
         public void Close()
         {
             TicketStatus = TicketStatus.Closed;
-        }     
-        public TicketStatus MoveToNextStatus()
-        {
-            if (TicketStatus != TicketStatus.Closed)
-            {
-                TicketStatus += 1;
-            }
-            return TicketStatus;            
-        }
-        public bool AddNewIssue(string issue)
-        {
-            if (TicketStatus == TicketStatus.InWork)
-            {
-                Entries.Add(new TicketEntry
-                {
-                    Issue = issue
-                });
-                return true;
-            }
-
-            return false;
-        }
-        public bool AddSolution(int issueId, string solution)
+        }                  
+        public bool AddMessage(string content)
         {
             if (TicketStatus == TicketStatus.Closed)
                 return false;
 
-            var entry = Entries.SingleOrDefault(e => e.Id == issueId);
-
-            if (entry is null)
-                return false;
-
-            entry.Solution = solution;
-           
-            TicketStatus = TicketStatus.InWork;            
+            Track.Add(new TrackEntry(){
+                Content = content
+            });            
+            
             return true;           
         }
         public static Ticket Create(string issue, string issuer)
@@ -63,10 +41,7 @@ namespace TechSupportApp.Domain.Models
             return new Ticket()
             {
                 Issuer = issuer,
-                Entries = new List<TicketEntry>()
-                {
-                    new TicketEntry() { Issue = issue }
-                }
+                Issue = issue
             };
         }
     }

@@ -46,7 +46,7 @@ namespace TechSupportApp.Tests.Application.Tickets.Commands
 
             var result = await _contex.Tickets.FindAsync(ticketId);
 
-            StringAssert.AreEqualIgnoringCase(command.Issue, result.Entries.First().Issue);
+            StringAssert.AreEqualIgnoringCase(command.Issue, result.Issue);
             StringAssert.AreEqualIgnoringCase(command.Issuer, result.Issuer);
         }
 
