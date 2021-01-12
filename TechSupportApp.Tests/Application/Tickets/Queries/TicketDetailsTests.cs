@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 using TechSupportApp.Application.Common.Exceptions;
 using TechSupportApp.Application.Mappings;
 using TechSupportApp.Application.Tickets.Queries.TicketDetails;
-using TechSupportApp.Infrastructure;
+using TechSupportApp.Infrastructure.Persistence;
 
 namespace TechSupportApp.Tests.Application.Tickets.Queries
 {

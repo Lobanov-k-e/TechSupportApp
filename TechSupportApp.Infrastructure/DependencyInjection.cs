@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Text;
 using TechSupportApp.Application;
 using TechSupportApp.Application.Interfaces;
+using TechSupportApp.Infrastructure.Identity;
 using TechSupportApp.Infrastructure.Persistence;
 
 namespace TechSupportApp.Infrastructure
@@ -21,6 +22,7 @@ namespace TechSupportApp.Infrastructure
                     b => b.MigrationsAssembly(typeof(ApplicationContext).Assembly.FullName)));
 
             services.AddScoped<IAppContext>(provider => provider.GetService<ApplicationContext>());
+            services.AddTransient<IUserService, DevIdentityUserService>();
 
            
         }

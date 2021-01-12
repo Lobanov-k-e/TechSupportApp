@@ -11,6 +11,7 @@ namespace TechSupportApp.Application.Interfaces
     public interface IAppContext
     {
         DbSet<Ticket> Tickets { get; set; }
+        DbSet<User> Users { get; set; }
         Task<int> SaveChangesAsync(CancellationToken cancellationToken = new CancellationToken());       
     }
 }

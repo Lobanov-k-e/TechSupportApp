@@ -25,7 +25,11 @@ namespace TechSupportApp.Application.Common
 
         protected override async Task Handle(SeedDataCommand request, CancellationToken cancellationToken)
         {
-            var tickets = Enumerable.Range(1, 10).Select(i => Ticket.Create($"body{i}", $"issuer{i}")).ToList();
+            var tickets = Enumerable
+                .Range(1, 10)
+                .Select(i => Ticket.Create($"body{i}", new User() { Name = $"user{i}" }))
+                .ToList();
+
             await _context.Tickets.AddRangeAsync(tickets);
             await _context.SaveChangesAsync();
         }

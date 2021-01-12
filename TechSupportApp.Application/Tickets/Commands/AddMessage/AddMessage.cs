@@ -1,9 +1,6 @@
 ﻿using MediatR;
 using Microsoft.EntityFrameworkCore;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using TechSupportApp.Application.Common.Exceptions;
@@ -16,15 +13,19 @@ namespace TechSupportApp.Application.Tickets.Commands
     {
         public int TicketId { get; set; }  
         public string Content { get; set; }
+        public string UserId { get; set; }
+
     }
 
     internal class AddMessageHandler : IRequestHandler<AddMessage>
     {
         private readonly IAppContext _context;
+        private readonly IUserService _service;
 
-        public AddMessageHandler(IAppContext context)
+        public AddMessageHandler(IAppContext context, IUserService service)
         {
             _context = context ?? throw new ArgumentNullException(nameof(context));
+            _service = service ?? throw new ArgumentNullException(nameof(service));
         }
         public async Task<Unit> Handle(AddMessage request, CancellationToken cancellationToken)
         {
@@ -35,8 +36,10 @@ namespace TechSupportApp.Application.Tickets.Commands
                 .SingleOrDefaultAsync(t => t.Id == request.TicketId)
                 ?? throw new NotFoundException(name: nameof(Ticket), request.TicketId);
 
-            ticket.AddMessage(request.Content);
+            var user = await _service.GetUserByIdentity(request.UserId)
+                ?? throw new NotFoundException(name: nameof(User), key: request.UserId); 
 
+            ticket.AddMessage(request.Content, user);
             await _context.SaveChangesAsync();
 
             return Unit.Value;

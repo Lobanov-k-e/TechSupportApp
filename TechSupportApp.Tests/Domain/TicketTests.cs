@@ -11,9 +11,9 @@ namespace TechSupportApp.Tests.Domain
     {
         [Test]
         public void CreateTicket_CreatesTicket()
-        {
-            const string ExpectedIssuer = "TestIssuer";
+        {            
             const string ExpectedIssue = "TestIssue";
+            var ExpectedIssuer = new User();
 
             var ticket = Ticket.Create(ExpectedIssue, ExpectedIssuer);
 
@@ -37,10 +37,12 @@ namespace TechSupportApp.Tests.Domain
         {
             var ticket = GetTicket();
             const string ExpectedContent = "test";
-            bool act = ticket.AddMessage(ExpectedContent);
+            const string ExpectedUserName = "TestUser";
+            bool act = ticket.AddMessage(ExpectedContent, new User() { Name = ExpectedUserName });           
 
             Assert.IsTrue(act);
             Assert.NotNull(ticket.Track.SingleOrDefault(t => t.Content == ExpectedContent));
+            Assert.IsTrue(ticket.Track.SingleOrDefault(t => t.Content == ExpectedContent).Author.Name == ExpectedUserName);
 
         }
 
@@ -50,16 +52,16 @@ namespace TechSupportApp.Tests.Domain
             var ticket = GetTicket();
             ticket.TicketStatus = TicketStatus.Closed;
 
-            bool act = ticket.AddMessage("test");
+            bool act = ticket.AddMessage("test", new User());
 
             Assert.IsFalse(act);            
         }          
 
-        private static Ticket GetTicket(string ExpectedIssuer = " ", string ExpectedIssue = " ")
+        private static Ticket GetTicket(string ExpectedIssuerName = " ", string ExpectedIssue = " ")
         {
             return new Ticket()
             {
-                Issuer = ExpectedIssuer,
+                Issuer = new User { Name = ExpectedIssuerName},
                 TicketStatus = TicketStatus.Open,
                 Track = new List<TrackEntry>()
                 {

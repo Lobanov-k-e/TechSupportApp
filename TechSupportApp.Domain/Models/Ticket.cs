@@ -12,9 +12,8 @@ namespace TechSupportApp.Domain.Models
     public class Ticket : AuditableEntity
     {
         public int Id { get; set; }        
-        public ICollection<TrackEntry> Track { get; set; }
-        //to-do user entity
-        public string Issuer { get; set; }
+        public ICollection<TrackEntry> Track { get; set; }        
+        public User Issuer { get; set; }
         public string Issue { get; set; }              
         public TicketStatus TicketStatus { get; set; }
         internal Ticket()
@@ -25,18 +24,19 @@ namespace TechSupportApp.Domain.Models
         {
             TicketStatus = TicketStatus.Closed;
         }                  
-        public bool AddMessage(string content)
+        public bool AddMessage(string content, User author)
         {
             if (TicketStatus == TicketStatus.Closed)
                 return false;
 
             Track.Add(new TrackEntry(){
-                Content = content
+                Content = content,
+                Author = author
             });            
             
             return true;           
         }
-        public static Ticket Create(string issue, string issuer)
+        public static Ticket Create(string issue, User issuer)
         {
             return new Ticket()
             {

@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using TechSupportApp.Domain.Models;
-using TechSupportApp.Infrastructure;
+using TechSupportApp.Infrastructure.Persistence;
 
 namespace TechSupportApp.Tests.Application
 {
@@ -14,6 +14,7 @@ namespace TechSupportApp.Tests.Application
         {
             var optionsBuilder = new DbContextOptionsBuilder<ApplicationContext>()
                 .UseInMemoryDatabase(Guid.NewGuid().ToString());
+
             if (asNoTracking)
             {
                 optionsBuilder.UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
@@ -23,6 +24,7 @@ namespace TechSupportApp.Tests.Application
             var context = new ApplicationContext(optionsBuilder.Options);
             context.Database.EnsureCreated();
             SeedData(context);
+
             if (asNoTracking)
             {
                 foreach (var entry in context.ChangeTracker.Entries())
@@ -36,7 +38,10 @@ namespace TechSupportApp.Tests.Application
 
         private static void SeedData(ApplicationContext context)
         {
-            var tickets = Enumerable.Range(1, 10).Select(i=> Ticket.Create($"body{i}", $"issuer{i}")).ToList();
+            var tickets = Enumerable
+                .Range(1, 10)
+                .Select(i => Ticket.Create($"body{i}", new User() { Name = $"user{i}" }))
+                .ToList();
             context.Tickets.AddRange(tickets);
             context.SaveChanges();
         }
