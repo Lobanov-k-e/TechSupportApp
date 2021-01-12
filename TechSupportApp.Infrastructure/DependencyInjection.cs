@@ -1,10 +1,8 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System;
-using System.Collections.Generic;
-using System.Text;
-using TechSupportApp.Application;
 using TechSupportApp.Application.Interfaces;
 using TechSupportApp.Infrastructure.Identity;
 using TechSupportApp.Infrastructure.Persistence;
@@ -22,6 +20,15 @@ namespace TechSupportApp.Infrastructure
                     b => b.MigrationsAssembly(typeof(ApplicationContext).Assembly.FullName)));
 
             services.AddScoped<IAppContext>(provider => provider.GetService<ApplicationContext>());
+
+            services.AddDbContext<IdentityContext>(options => options.UseSqlServer(
+                configuration.GetConnectionString("DefaultConnection"),
+                b => b.MigrationsAssembly(typeof(ApplicationContext).Assembly.FullName)));
+
+            services.AddIdentity<AppIdentityUser, IdentityRole>()
+                .AddEntityFrameworkStores<IdentityContext>()
+                .AddDefaultTokenProviders();        
+            
             services.AddTransient<IUserService, DevIdentityUserService>();
 
            
