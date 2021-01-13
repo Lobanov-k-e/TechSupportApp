@@ -9,12 +9,10 @@ using TechSupportApp.Infrastructure.Persistence;
 
 namespace TechSupportApp.Infrastructure.Identity
 {
+    //facade and anti-corruption layer for asp.net core identity
+    //provides projections between identity and domain users   
     class UserService : IUserService
-    {
-        //facade and anti-corruption layer for asp.net core identity
-        //provides projections between identity and domain users
-        
-        
+    {            
         private readonly UserManager<AppIdentityUser> _userManager;
         private readonly ApplicationContext _context;
 
