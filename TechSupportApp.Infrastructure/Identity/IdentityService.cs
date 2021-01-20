@@ -48,6 +48,7 @@ namespace TechSupportApp.Infrastructure.Identity
                 Email = email,
                 DomainId = domainId
             };
+
             IdentityResult result = await _userManager.CreateAsync(user, password);
 
             return (result.ToApplicationResult(), user.Id);

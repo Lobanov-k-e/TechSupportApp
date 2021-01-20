@@ -30,27 +30,27 @@ namespace TechSupportApp.Application.Common
         {
             
 
-            var tickets = Enumerable
-                .Range(1, 10)
-                .Select(i => Ticket.Create($"body{i}", new User() { Name = $"user{i}" }))
-                .ToList();           
+            //var tickets = Enumerable
+            //    .Range(1, 10)
+            //    .Select(i => Ticket.Create($"body{i}", new User() { Name = $"user{i}" }))
+            //    .ToList();           
 
 
-            await _context.Tickets.AddRangeAsync(tickets);           
+            //await _context.Tickets.AddRangeAsync(tickets);           
 
-            await _context.SaveChangesAsync();
+            //await _context.SaveChangesAsync();
 
             var users = await _context.Users.ToListAsync();
 
-            CreateCredentials(users);
+            await CreateCredentials(users);
 
         }
 
-        private void CreateCredentials(List<User> users)
+        private async Task CreateCredentials(List<User> users)
         {
             foreach (var user in users)
             {
-                _identityService.CreateAsync(user.Name, $"{user.Name}@test.com", "Secret123$", user.Id);
+                var result = await _identityService.CreateAsync(user.Name, $"{user.Name}@test.com", "Secret123$", user.Id);
             }
         }
     }
