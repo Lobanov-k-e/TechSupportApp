@@ -16,7 +16,7 @@ namespace TechSupportApp.Tests.Application.Tickets.Commands
     class CreateTicketTests
     {
         private ApplicationContext _context;
-        private IUserService _userService;
+        private IIdentityService _userService;
 
         public CreateTicketTests()
         {

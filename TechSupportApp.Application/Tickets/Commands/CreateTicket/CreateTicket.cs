@@ -17,9 +17,9 @@ namespace TechSupportApp.Application.Tickets.Commands.CreateTicket
     internal class CreateTicketRequestHandler : IRequestHandler<CreateTicket, int>
     {
         private readonly IAppContext _context;
-        private readonly IUserService _userService;
+        private readonly IIdentityService _userService;
 
-        public CreateTicketRequestHandler(IAppContext context, IUserService userService)
+        public CreateTicketRequestHandler(IAppContext context, IIdentityService userService)
         {
             _context = context ?? throw new ArgumentNullException(nameof(context));
             _userService = userService;

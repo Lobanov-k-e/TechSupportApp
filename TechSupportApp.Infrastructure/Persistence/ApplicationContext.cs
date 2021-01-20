@@ -5,13 +5,14 @@ using System.Threading;
 using System.Threading.Tasks;
 using TechSupportApp.Application;
 using TechSupportApp.Application.Interfaces;
+using TechSupportApp.Domain.Common;
 using TechSupportApp.Domain.Models;
 
 namespace TechSupportApp.Infrastructure.Persistence
 {
     public class ApplicationContext : DbContext, IAppContext
     {
-        public ApplicationContext([NotNull] DbContextOptions options) 
+        public ApplicationContext([NotNull] DbContextOptions<ApplicationContext> options) 
             : base(options)
         {
         }
@@ -23,6 +24,20 @@ namespace TechSupportApp.Infrastructure.Persistence
 
         public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = new CancellationToken() )
         {
+            //foreach (var entry in ChangeTracker.Entries<AuditableEntity>())
+            //{
+            //    switch (entry.State)
+            //    {
+            //        case EntityState.Added:
+            //            entry.Entity.CreatedBy = _currentUserService.UserId;
+            //            entry.Entity.Created = _dateTime.Now;
+            //            break;
+            //        case EntityState.Modified:
+            //            entry.Entity.LastModifiedBy = _currentUserService.UserId;
+            //            entry.Entity.LastModified = _dateTime.Now;
+            //            break;
+            //    }
+            //}
             return await base.SaveChangesAsync(cancellationToken);           
         }
 

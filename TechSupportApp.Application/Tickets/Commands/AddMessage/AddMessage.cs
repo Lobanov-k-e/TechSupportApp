@@ -20,9 +20,9 @@ namespace TechSupportApp.Application.Tickets.Commands
     internal class AddMessageHandler : IRequestHandler<AddMessage>
     {
         private readonly IAppContext _context;
-        private readonly IUserService _service;
+        private readonly IIdentityService _service;
 
-        public AddMessageHandler(IAppContext context, IUserService service)
+        public AddMessageHandler(IAppContext context, IIdentityService service)
         {
             _context = context ?? throw new ArgumentNullException(nameof(context));
             _service = service ?? throw new ArgumentNullException(nameof(service));

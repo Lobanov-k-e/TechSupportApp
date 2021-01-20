@@ -9,7 +9,7 @@ using TechSupportApp.Infrastructure.Persistence;
 
 namespace TechSupportApp.Infrastructure.Identity
 {
-    public class DevIdentityUserService : IUserService
+    public class DevIdentityUserService : IIdentityService
     {
         private readonly ApplicationContext _context;
 
@@ -17,6 +17,12 @@ namespace TechSupportApp.Infrastructure.Identity
         {
             _context = context ?? throw new ArgumentNullException(nameof(context));
         }
+
+        public Task<bool> CreateAsync(string name, string email, string password, int domainId)
+        {
+            throw new NotImplementedException();
+        }
+
         public async Task<User> GetUserByIdentity(string id)
         {
             int trueId = int.Parse(id);

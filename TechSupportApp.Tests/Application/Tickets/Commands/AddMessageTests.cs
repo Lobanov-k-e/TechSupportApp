@@ -18,7 +18,7 @@ namespace TechSupportApp.Tests.Application.Tickets.Commands
     class AddMessageTests
     {
         IAppContext _context;
-        IUserService _userService;
+        IIdentityService _userService;
         public AddMessageTests()
         {
             _context = DBContextFactory.Create();
@@ -73,7 +73,7 @@ namespace TechSupportApp.Tests.Application.Tickets.Commands
             StringAssert.AreEqualIgnoringCase(errorMsg, act.Message);
         }
 
-        private AddMessageHandler GetHandler(IAppContext context, IUserService userService)
+        private AddMessageHandler GetHandler(IAppContext context, IIdentityService userService)
         {
             return new AddMessageHandler(context, userService);
         }

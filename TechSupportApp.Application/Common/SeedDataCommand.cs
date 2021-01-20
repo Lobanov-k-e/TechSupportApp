@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,21 +18,40 @@ namespace TechSupportApp.Application.Common
     internal class SeedDataCommandHandler : AsyncRequestHandler<SeedDataCommand>
     {
         private readonly IAppContext _context;
+        private readonly IIdentityService _identityService;
 
-        public SeedDataCommandHandler(IAppContext context)
+        public SeedDataCommandHandler(IAppContext context, IIdentityService identityService)
         {
             _context = context ?? throw new ArgumentNullException(nameof(context));
+            _identityService = identityService ?? throw new ArgumentNullException(nameof(identityService));
         }
 
         protected override async Task Handle(SeedDataCommand request, CancellationToken cancellationToken)
         {
+            
+
             var tickets = Enumerable
                 .Range(1, 10)
                 .Select(i => Ticket.Create($"body{i}", new User() { Name = $"user{i}" }))
-                .ToList();
+                .ToList();           
 
-            await _context.Tickets.AddRangeAsync(tickets);
+
+            await _context.Tickets.AddRangeAsync(tickets);           
+
             await _context.SaveChangesAsync();
+
+            var users = await _context.Users.ToListAsync();
+
+            CreateCredentials(users);
+
+        }
+
+        private void CreateCredentials(List<User> users)
+        {
+            foreach (var user in users)
+            {
+                _identityService.CreateAsync(user.Name, $"{user.Name}@test.com", "Secret123$", user.Id);
+            }
         }
     }
 }

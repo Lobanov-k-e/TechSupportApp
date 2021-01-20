@@ -29,7 +29,7 @@ namespace TechSupportApp.Infrastructure
                 .AddEntityFrameworkStores<IdentityContext>()
                 .AddDefaultTokenProviders();        
             
-            services.AddTransient<IUserService, DevIdentityUserService>();
+            services.AddTransient<IIdentityService, IdentityService>();
 
            
         }
