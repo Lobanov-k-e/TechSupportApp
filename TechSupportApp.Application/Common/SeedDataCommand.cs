@@ -28,17 +28,18 @@ namespace TechSupportApp.Application.Common
 
         protected override async Task Handle(SeedDataCommand request, CancellationToken cancellationToken)
         {
+            if (await _context.Tickets.CountAsync() == 0)            
+                return; 
             
 
-            //var tickets = Enumerable
-            //    .Range(1, 10)
-            //    .Select(i => Ticket.Create($"body{i}", new User() { Name = $"user{i}" }))
-            //    .ToList();           
+            var tickets = Enumerable
+                .Range(1, 10)
+                .Select(i => Ticket.Create($"body{i}", new User() { Name = $"user{i}" }))
+                .ToList();         
 
+            await _context.Tickets.AddRangeAsync(tickets);           
 
-            //await _context.Tickets.AddRangeAsync(tickets);           
-
-            //await _context.SaveChangesAsync();
+            await _context.SaveChangesAsync();
 
             var users = await _context.Users.ToListAsync();
 
@@ -50,7 +51,7 @@ namespace TechSupportApp.Application.Common
         {
             foreach (var user in users)
             {
-                var result = await _identityService.CreateAsync(user.Name, $"{user.Name}@test.com", "Secret123$", user.Id);
+                await _identityService.CreateAsync(user.Name, $"{user.Name}@test.com", "Secret123$", user.Id);
             }
         }
     }
