@@ -18,13 +18,13 @@ namespace TechSupportApp.Tests.Application.Tickets.Commands
     class AddMessageTests
     {
         IAppContext _context;
-        IIdentityService _userService;
+        private UserServiceFactory _userServiceFactory;        
         public AddMessageTests()
         {
             _context = DBContextFactory.Create();
-            _userService = UserServiceFactory.Create(_context);
+            _userServiceFactory = new UserServiceFactory();
         }
-
+     
         [Test]
         public async Task CanAddMessage()
         {
@@ -32,9 +32,11 @@ namespace TechSupportApp.Tests.Application.Tickets.Commands
             const string expected = "test message";
             var user = ticket.Issuer;
 
+            var userService = _userServiceFactory.Create();
+
             var command = new AddMessage { TicketId = ticket.Id, Content = expected, UserId = user.Id.ToString() };
 
-            await GetHandler(_context, _userService).Handle(command, new CancellationToken());
+            await GetHandler(_context, userService).Handle(command, new CancellationToken());
 
             var actual = (await _context.Tickets.FindAsync(ticket.Id)).Track.SingleOrDefault(t=>t.Content == expected);
 
@@ -43,11 +45,28 @@ namespace TechSupportApp.Tests.Application.Tickets.Commands
         }
 
         [Test]
+        public async Task AddMesage_passesCorrectIdentity()
+        {
+            var ticket = await _context.Tickets.FirstAsync();
+            string expected = It.IsAny<string>();
+            var user = ticket.Issuer;
+
+            var userService = _userServiceFactory.Create();
+
+            var command = new AddMessage { TicketId = ticket.Id, Content = expected, UserId = user.Id.ToString() };
+
+            await GetHandler(_context, userService).Handle(command, new CancellationToken());
+
+            Assert.AreEqual(user.Id.ToString(), userService.DomainId);
+        }
+
+        [Test]
         public void Throws_onWrongTicketId()
         {
             const int WrongId = -1;
             var command = new AddMessage { TicketId = WrongId, Content = It.IsAny<string>() };
-            var handler = GetHandler(_context, _userService);
+            var userService = _userServiceFactory.Create();
+            var handler = GetHandler(_context, userService);
 
             string errorMsg = $"Entity \"Ticket\" ({WrongId}) was not found.";
 
@@ -58,12 +77,13 @@ namespace TechSupportApp.Tests.Application.Tickets.Commands
         }
 
         [Test]
-        public async Task Throws_onWrongUserIdentity()
+        public async Task Throws_ifUserNotFound()
         {
             var ticket = await _context.Tickets.FirstAsync();
             const string WrongIdentity = "-1";
             var command = new AddMessage { TicketId = ticket.Id, Content = It.IsAny<string>(), UserId = WrongIdentity };
-            var handler = GetHandler(_context, _userService);
+            var userService = _userServiceFactory.Create();
+            var handler = GetHandler(_context, userService);
 
             string errorMsg = $"Entity \"User\" ({WrongIdentity}) was not found.";
 
@@ -71,6 +91,21 @@ namespace TechSupportApp.Tests.Application.Tickets.Commands
                                 await handler.Handle(command, new CancellationToken()));
 
             StringAssert.AreEqualIgnoringCase(errorMsg, act.Message);
+        }
+
+        [Test]
+        public async Task Throws_IdentityNotFound()
+        {
+            var ticket = await _context.Tickets.FirstAsync();
+            var command = new AddMessage { TicketId = ticket.Id, Content = It.IsAny<string>(), UserId = It.IsAny<string>() };
+
+            var userService = _userServiceFactory.Create();
+            userService.ShouldFailNextCall = true;
+
+            var handler = GetHandler(_context, userService);            
+
+            Assert.ThrowsAsync<ApplicationException>(async () =>
+                                await handler.Handle(command, new CancellationToken()));           
         }
 
         private AddMessageHandler GetHandler(IAppContext context, IIdentityService userService)

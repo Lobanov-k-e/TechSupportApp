@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Moq;
 using NUnit.Framework;
+using System;
 using System.Threading;
 using System.Threading.Tasks;
 using TechSupportApp.Application.Common.Exceptions;
@@ -16,24 +17,24 @@ namespace TechSupportApp.Tests.Application.Tickets.Commands
     class CreateTicketTests
     {
         private ApplicationContext _context;
-        private IIdentityService _userService;
+        private UserServiceFactory _userServiceFactory;
 
         public CreateTicketTests()
         {
             _context = DBContextFactory.Create();
-            _userService = UserServiceFactory.Create(_context);
+            _userServiceFactory = new UserServiceFactory();
         }
 
         [Test]
         public async Task CreateTicket_can_Create()
         {
-            var user = await _context.Users.FirstAsync();
-
-            var command = GetCommand(It.IsAny<string>(), GetUserIdentity(user));
-
-            var handler = GetHandler();
+            var userService = _userServiceFactory.Create();
+            var handler = GetHandler(userService);
 
             int ticketCount = await _context.Tickets.CountAsync();
+
+            var user = await _context.Users.FirstAsync();
+            var command = GetCommand(It.IsAny<string>(), GetUserIdentity(user));          
 
             var result = await handler.Handle(command, new CancellationToken());
 
@@ -44,25 +45,41 @@ namespace TechSupportApp.Tests.Application.Tickets.Commands
         [Test]
         public async Task CreateTicket_creates_CorrectTicket()
         {
-            var user = await _context.Users.FirstAsync();
-            var command = GetCommand("testContent", GetUserIdentity(user));         
+            var userService = _userServiceFactory.Create();
+            var handler = GetHandler(userService);
 
-            var handler = new CreateTicketRequestHandler(_context, _userService);
+            var user = await _context.Users.FirstAsync();
+            var command = GetCommand("testContent", GetUserIdentity(user));           
 
             int ticketId = await handler.Handle(command, new CancellationToken() );
-
             var result = await _context.Tickets.FindAsync(ticketId);
 
             StringAssert.AreEqualIgnoringCase(command.Issue, result.Issue);
-            StringAssert.AreEqualIgnoringCase(command.userId, GetUserIdentity(result.Issuer) );
+            StringAssert.AreEqualIgnoringCase(command.UserId, GetUserIdentity(result.Issuer) );
         }
-
         [Test]
-        public void Throws_onWrongUserIdentity()
-        {            
-            const string WrongIdentity = "-1";
+        public async Task CreateTicket_passesCorrectIdentity()
+        {
+            var userService = _userServiceFactory.Create();
+            var handler = GetHandler(userService);
+
+            var user = await _context.Users.FirstAsync();                    
+            string userIdentity = GetUserIdentity(user);
+            
+            var command = GetCommand(It.IsAny<string>(), userIdentity);           
+
+            await handler.Handle(command, new CancellationToken());
+
+            Assert.AreEqual(userIdentity, userService.DomainId);
+        }
+        [Test]
+        public void Throws_userNotFound()
+        {                          
+            var userService = _userServiceFactory.Create();
+            var handler = GetHandler(userService);
+
+            const string WrongIdentity = "-1";  
             var command = GetCommand(It.IsAny<string>(), WrongIdentity);
-            var handler = GetHandler();
 
             string errorMsg = $"Entity \"User\" ({WrongIdentity}) was not found.";
 
@@ -71,15 +88,34 @@ namespace TechSupportApp.Tests.Application.Tickets.Commands
 
             StringAssert.AreEqualIgnoringCase(errorMsg, act.Message);
         }
+        [Test]
+        public void Throws_identityNotFound()
+        {                        
+            var userService = _userServiceFactory.Create();
+            userService.ShouldFailNextCall = true;
+            
+            var handler = GetHandler(userService);
+
+            var command = GetCommand(It.IsAny<string>(), It.IsAny<string>());
+
+            var act = Assert.ThrowsAsync<ApplicationException>(async () =>
+                                await handler.Handle(command, new CancellationToken()));            
+        }
 
         private static CreateTicket GetCommand(string content, string userIdentity)
         {
-           return new CreateTicket() { Issue = content, userId = userIdentity };
+           return new CreateTicket() { Issue = content, UserId = userIdentity };
         }
-        private CreateTicketRequestHandler GetHandler()
+        private CreateTicketRequestHandler GetHandler(IIdentityService service)
         {
-            return new CreateTicketRequestHandler(_context, _userService);
+
+            return new CreateTicketRequestHandler(_context, service);
         }
+        /// <summary>
+        /// converts user domain id to identity id
+        /// </summary>
+        /// <param name="user"></param>
+        /// <returns>string representation of user id</returns>
         private static string GetUserIdentity(User user)
         {
             return user.Id.ToString();

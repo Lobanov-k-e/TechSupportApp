@@ -8,6 +8,5 @@ namespace TechSupportApp.Domain.Models
         public string Name { get; set; }
         public ICollection<Ticket> Tickets { get; set; }
         public ICollection<TrackEntry> TrackEntries { get; set; }
-
     }
 }

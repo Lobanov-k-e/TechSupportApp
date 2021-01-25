@@ -1,8 +1,10 @@
 ﻿using MediatR;
 using System;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using TechSupportApp.Application.Common.Exceptions;
+using TechSupportApp.Application.Common.Models;
 using TechSupportApp.Application.Interfaces;
 using TechSupportApp.Domain.Models;
 
@@ -10,7 +12,7 @@ namespace TechSupportApp.Application.Tickets.Commands.CreateTicket
 {
     public class CreateTicket : IRequest<int>
     {
-        public string userId { get; set; }
+        public string UserId { get; set; }
         public string Issue { get; set; }
     }
 
@@ -26,8 +28,20 @@ namespace TechSupportApp.Application.Tickets.Commands.CreateTicket
         }
         public async Task<int> Handle(CreateTicket request, CancellationToken cancellationToken)
         {
-            var user = await _userService.GetUserByIdentity(request.userId) 
-                ?? throw new NotFoundException(name: nameof(User), key: request.userId);
+            Result result;
+            int domainId;
+
+            (result, domainId) = await _userService.GetDomainId(request.UserId);
+
+            if (!result.Succeeded)
+            {
+                throw new ApplicationException(string.Concat(result.Errors));
+            }
+
+            var user = await _context.Users.FindAsync(domainId);
+
+            _ = user ?? throw new NotFoundException(name: nameof(User), key: domainId);
+
             var ticket = Ticket.Create(request.Issue, user);
 
             _context.Tickets.Add(ticket);

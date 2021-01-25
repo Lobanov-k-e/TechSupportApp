@@ -9,8 +9,7 @@ namespace TechSupportApp.Application.Interfaces
 {
     public interface IIdentityService
     {        
-        Task<(Result result, string userId)> CreateAsync(string name, string email, string password, int domainId);
-        Task<User> GetUserByIdentity(string id);
-        
+        Task<(Result result, string userId)> CreateAsync(string name, string email, string password, int domainId);       
+        Task<(Result result, int id)> GetDomainId(string id);
     }
 }

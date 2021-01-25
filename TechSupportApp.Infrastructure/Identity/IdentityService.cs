@@ -15,28 +15,22 @@ namespace TechSupportApp.Infrastructure.Identity
     class IdentityService : IIdentityService
     {            
         private readonly UserManager<AppIdentityUser> _userManager;
-        private readonly ApplicationContext _context;
+       
 
-        public IdentityService(UserManager<AppIdentityUser> userManager, ApplicationContext context)
+        public IdentityService(UserManager<AppIdentityUser> userManager)
         {
-            _userManager = userManager ?? throw new ArgumentNullException(nameof(userManager));
-            //using context directly might not be the best idea. use commands?
-            _context = context ?? throw new ArgumentNullException(nameof(context));
+            _userManager = userManager ?? throw new ArgumentNullException(nameof(userManager));            
         }
-
-        /*
-         * consider:
-         * probably should return projection of 
-         * identity to domain user id, not user inself
-         * also works better if identity not found
-         */
-        public async Task<User> GetUserByIdentity(string name)
+              
+        public async Task<(Result result, int id)> GetDomainId(string id)
         {
-            var userIdentity = await _userManager.FindByIdAsync(name);
+            var userIdentity = await _userManager.FindByIdAsync(id);
 
-            var user = await _context.Users.FindAsync(userIdentity?.DomainId);
+            var result = userIdentity is null
+                ? Result.Failure(new string[] { $"no user with identity{id}" }) 
+                : Result.Success();
 
-            return user;
+            return (result, userIdentity.DomainId);           
         }
 
         // validation on application level
