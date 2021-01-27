@@ -27,11 +27,8 @@ namespace TechSupportApp.Application.Tickets.Commands.CreateTicket
             _userService = userService;
         }
         public async Task<int> Handle(CreateTicket request, CancellationToken cancellationToken)
-        {
-            Result result;
-            int domainId;
-
-            (result, domainId) = await _userService.GetDomainId(request.UserId);
+        {           
+            (Result result, int domainId) = await _userService.GetDomainId(request.UserId);
 
             if (!result.Succeeded)
             {

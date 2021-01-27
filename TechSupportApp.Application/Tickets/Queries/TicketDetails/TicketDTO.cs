@@ -10,16 +10,15 @@ namespace TechSupportApp.Application.Tickets.Queries.TicketDetails
     {
 
         public int Id { get; set; }
-        public string Issuer { get; set; }      
-
+        public string Issue { get; set; }
+        public UserDTO Issuer { get; set; }        
         public IEnumerable<TicketEntryDTO> Entries { get; set; }
         public int TicketStatus { get; set; }
-
         public void Mapping(Profile profile)
         {
             profile.CreateMap<Ticket, TicketDTO>()
                 .ForMember(m => m.TicketStatus,
-                           options => options.MapFrom(s => (int)s.TicketStatus))
+                           options => options.MapFrom(s => (int)s.TicketStatus))               
                 .ForMember(m => m.Entries,
                            options => options.MapFrom(s=>s.Track) );
             

@@ -35,12 +35,9 @@ namespace TechSupportApp.Application.Tickets.Commands
                 .Tickets
                 .Include(t => t.Track)
                 .SingleOrDefaultAsync(t => t.Id == request.TicketId)
-                ?? throw new NotFoundException(name: nameof(Ticket), request.TicketId);
+                ?? throw new NotFoundException(name: nameof(Ticket), request.TicketId);            
 
-            Result result;
-            int domainId;
-
-            (result, domainId) = await _identityService.GetDomainId(request.UserId);
+            (Result result, int domainId) = await _identityService.GetDomainId(request.UserId);
 
             if (!result.Succeeded)
             {

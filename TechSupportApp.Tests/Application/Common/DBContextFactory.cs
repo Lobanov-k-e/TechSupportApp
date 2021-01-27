@@ -38,10 +38,23 @@ namespace TechSupportApp.Tests.Application
 
         private static void SeedData(ApplicationContext context)
         {
+            var users = Enumerable
+                .Range(1, 10)
+                .Select(i => new User { Name = $"user{i}" })
+                .ToList();
+
             var tickets = Enumerable
                 .Range(1, 10)
-                .Select(i => Ticket.Create($"body{i}", new User() { Name = $"user{i}" }))
+                .Select(i => Ticket.Create($"body{i}", users[i - 1]))
                 .ToList();
+
+            for (int i = 0; i < tickets.Count; i++)
+            {
+                var ticket = tickets[i];
+                ticket.Issue = $"test issue{i}";
+                ticket.AddMessage($"test issue{i}", ticket.Issuer);                
+            }
+
             context.Tickets.AddRange(tickets);
             context.SaveChanges();
         }

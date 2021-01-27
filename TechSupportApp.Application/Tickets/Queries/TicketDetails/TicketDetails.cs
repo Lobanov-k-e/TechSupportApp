@@ -32,8 +32,11 @@ namespace TechSupportApp.Application.Tickets.Queries.TicketDetails
         public async Task<TicketDetailsVm> Handle(TicketDetails request, CancellationToken cancellationToken)
         {
             var ticket = await _context
-                .Tickets
-                .Where(t => t.Id == request.Id)
+                .Tickets 
+                .Include(t => t.Issuer)
+                .Include(t => t.Track)
+                .ThenInclude(tr => tr.Author)
+                .Where(t => t.Id == request.Id)                
                 .ProjectTo<TicketDTO>(_mapper.ConfigurationProvider)
                 .FirstOrDefaultAsync() ??
                 throw new NotFoundException(name: nameof(Ticket), key: request.Id);            

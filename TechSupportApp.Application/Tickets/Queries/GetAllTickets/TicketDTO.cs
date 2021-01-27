@@ -10,16 +10,14 @@ namespace TechSupportApp.Application.Tickets.Queries.GetAllTickets
        
         public int Id { get; set; }        
         public string Issuer { get; set; }
-        public string LatestIssue { get; set; }
+        public string Issue { get; set; }
         public int TicketStatus { get; set; }
 
         public void Mapping(Profile profile)
         {
             profile.CreateMap<Ticket, TicketDTO>()
-                .ForMember(m => m.TicketStatus, 
-                           options => options.MapFrom(s=>(int)s.TicketStatus) )
-                .ForMember(m=>m.LatestIssue,
-                           options => options.MapFrom(s => s.Track.OrderBy(e => e.Created).LastOrDefault().Content) );            
+                .ForMember(m => m.TicketStatus,
+                           options => options.MapFrom(s => (int)s.TicketStatus));                         
         }
         
     }

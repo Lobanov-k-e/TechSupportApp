@@ -31,7 +31,8 @@ namespace TechSupportApp.Application.Tickets.Queries.GetAllTickets
         }
         public async Task<GetAllTicketsVm> Handle(GetAllTickets request, CancellationToken cancellationToken)
         {
-            var tickets = await _context.Tickets
+            var tickets = await _context
+                .Tickets
                 .ProjectTo<TicketDTO>(_mapper.ConfigurationProvider)
                 .ToListAsync();
 

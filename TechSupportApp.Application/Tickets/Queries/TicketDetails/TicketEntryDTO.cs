@@ -4,8 +4,8 @@ using TechSupportApp.Domain.Models;
 namespace TechSupportApp.Application.Tickets.Queries.TicketDetails
 {
     public class TicketEntryDTO : IMapFrom<TrackEntry>
-    {
-        public string Issue { get; set; }
-        public string Solution { get; set; }
+    {       
+        public string Content { get; set; }
+        public UserDTO Author { get; set; }
     }
 }

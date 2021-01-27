@@ -19,6 +19,7 @@ namespace TechSupportApp.Domain.Models
         internal Ticket()
         {
             TicketStatus = TicketStatus.Open;
+            Track = new List<TrackEntry>();
         }        
         public void Close()
         {
