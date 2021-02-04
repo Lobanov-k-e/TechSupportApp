@@ -7,6 +7,9 @@ using TechSupportApp.Domain.Models;
 
 namespace TechSupportApp.Application.Interfaces
 {
+    /*
+     * подумать над интерфейсом current user service
+     */
     public interface IIdentityService
     {        
         Task<(Result result, string userId)> CreateAsync(string name, string email, string password, int domainId);       

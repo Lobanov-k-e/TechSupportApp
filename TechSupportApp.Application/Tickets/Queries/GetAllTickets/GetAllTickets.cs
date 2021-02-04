@@ -18,7 +18,6 @@ namespace TechSupportApp.Application.Tickets.Queries.GetAllTickets
     {
     }
 
-    //не возвращать доменный объект, использовать автомэпер
     internal class GetAllTicketsHandler : IRequestHandler<GetAllTickets, GetAllTicketsVm>
     {
         private readonly IAppContext _context;

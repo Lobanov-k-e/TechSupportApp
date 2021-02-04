@@ -19,16 +19,16 @@ namespace TechSupportApp.Application.Tickets.Commands.CreateTicket
     internal class CreateTicketRequestHandler : IRequestHandler<CreateTicket, int>
     {
         private readonly IAppContext _context;
-        private readonly IIdentityService _userService;
+        private readonly IIdentityService _identityService;
 
-        public CreateTicketRequestHandler(IAppContext context, IIdentityService userService)
+        public CreateTicketRequestHandler(IAppContext context, IIdentityService identityService)
         {
             _context = context ?? throw new ArgumentNullException(nameof(context));
-            _userService = userService;
+            _identityService = identityService;
         }
         public async Task<int> Handle(CreateTicket request, CancellationToken cancellationToken)
         {           
-            (Result result, int domainId) = await _userService.GetDomainId(request.UserId);
+            (Result result, int domainId) = await _identityService.GetDomainId(request.UserId);
 
             if (!result.Succeeded)
             {

@@ -6,8 +6,8 @@
         <tr>
             <td>@ticket.Id</td>
             <td>@ticket.Issuer</td>
-            
-            <td>@ticket.TicketStatus</td>
+            <td>@ticket.Issue</td>            
+            <td>@Model.TicketStatusList.First(t => t.Value == ticket.TicketStatus).Name</td>
         </tr>
     }
 </table>

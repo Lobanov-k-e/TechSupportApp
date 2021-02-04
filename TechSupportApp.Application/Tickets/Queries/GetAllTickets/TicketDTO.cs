@@ -17,8 +17,9 @@ namespace TechSupportApp.Application.Tickets.Queries.GetAllTickets
         {
             profile.CreateMap<Ticket, TicketDTO>()
                 .ForMember(m => m.TicketStatus,
-                           options => options.MapFrom(s => (int)s.TicketStatus));                         
-        }
-        
+                           options => options.MapFrom(s => (int)s.TicketStatus))
+                .ForMember(m => m.Issuer,
+                            options => options.MapFrom(s => s.Issuer.Name) );              
+        }        
     }
 }
