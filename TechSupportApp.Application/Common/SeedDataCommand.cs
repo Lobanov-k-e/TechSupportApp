@@ -28,24 +28,34 @@ namespace TechSupportApp.Application.Common
 
         protected override async Task Handle(SeedDataCommand request, CancellationToken cancellationToken)
         {
-            if (await _context.Tickets.CountAsync() == 0)            
-                return; 
-            
+            if (await _context.Tickets.CountAsync() != 0)            
+                return;
+
+            var users = Enumerable
+                .Range(1, 10)
+                .Select(i => new User() { Name = $"user{i}" })
+                .ToList();
 
             var tickets = Enumerable
                 .Range(1, 10)
-                .Select(i => Ticket.Create($"body{i}", new User() { Name = $"user{i}" }))
-                .ToList();         
+                .Select(i => Ticket.Create($"body{i}", users[i - 1]))
+                .ToList();
+
+            for (int i = 0; i < tickets.Count; i++)
+            {
+                var ticket = tickets[i];
+                ticket.AddMessage("testMsg", users[i]);
+            }
 
             await _context.Tickets.AddRangeAsync(tickets);           
 
             await _context.SaveChangesAsync();
 
-            var users = await _context.Users.ToListAsync();
+            var createdUsers = await _context.Users.ToListAsync();            
 
-            await CreateCredentials(users);
+            await CreateCredentials(createdUsers);
 
-        }
+        }      
 
         private async Task CreateCredentials(List<User> users)
         {

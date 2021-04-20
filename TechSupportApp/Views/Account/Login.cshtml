@@ -1,0 +1,17 @@
+﻿@model LoginViewModel
+@{    
+    ViewData["Title"] = "Login";
+}
+<div asp-validation-summary="All"></div>
+
+<form class="form form-signin" method="post">
+
+        <label hidden class="invisible" asp-for="@Model.UserName" ></label>
+        <input class="form-control" placeholder="Username" asp-for="@Model.UserName" />  
+    
+        <label hidden asp-for="@Model.Password"></label>
+        <input class="form-control mt-1 mb-1"  type="password" placeholder="Password" asp-for="@Model.Password" />   
+
+    <button class="w-100 btn btn-lg btn-primary">Submit</button>
+</form>
+

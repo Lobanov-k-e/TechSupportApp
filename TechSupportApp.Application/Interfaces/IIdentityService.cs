@@ -7,12 +7,10 @@ using TechSupportApp.Domain.Models;
 
 namespace TechSupportApp.Application.Interfaces
 {
-    /*
-     * подумать над интерфейсом current user service
-     */
+  
     public interface IIdentityService
     {        
         Task<(Result result, string userId)> CreateAsync(string name, string email, string password, int domainId);       
-        Task<(Result result, int id)> GetDomainId(string id);
+        Task<(Result result, int id)> GetDomainIdAsync(string id);
     }
 }

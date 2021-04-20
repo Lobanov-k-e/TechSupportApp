@@ -5,7 +5,7 @@ using System.Text;
 
 namespace TechSupportApp.Infrastructure.Identity
 {
-    class AppIdentityUser : IdentityUser
+    public class AppIdentityUser : IdentityUser
     {
         public int DomainId { get; set; }
     }

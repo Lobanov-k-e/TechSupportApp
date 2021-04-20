@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace TechSupportApp.Application.Common.Models
@@ -19,10 +20,9 @@ namespace TechSupportApp.Application.Common.Models
         {
             return new Result(true, new string[] { });
         }
-
         public static Result Failure(IEnumerable<string> errors)
         {
             return new Result(false, errors);
-        }
+        }        
     }
 }

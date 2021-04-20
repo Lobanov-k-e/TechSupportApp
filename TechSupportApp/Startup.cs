@@ -1,16 +1,15 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-
 using Microsoft.Extensions.Hosting;
+using System;
 using TechSupportApp.Application;
+using TechSupportApp.Application.Interfaces;
 using TechSupportApp.Infrastructure;
+using TechSupportApp.Infrastructure.Identity;
+using TechSupportApp.WebApi.Services;
 
 namespace TechSupportApp
 {
@@ -31,6 +30,10 @@ namespace TechSupportApp
 
             services.AddInfrastructure(_configuration);
             services.AddApplication();
+
+            services.AddScoped<ICurrentUserService, CurrentUserService>();
+            services.AddHttpContextAccessor();
+
 #if DEBUG
             builder.AddRazorRuntimeCompilation();
 #endif
@@ -38,18 +41,24 @@ namespace TechSupportApp
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, 
+            IWebHostEnvironment env, 
+            UserManager<AppIdentityUser> userManager,
+            RoleManager<IdentityRole> roleManager)
         {
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
             }
 
+            SeedIdentity.SeedRolesAndCreateSuper(roleManager, userManager).Wait();
+            
             app.UseStaticFiles();
             app.UseStatusCodePages();
             app.UseRouting();
 
-
+            app.UseAuthentication();
+            app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
             {

@@ -1,8 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Moq;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
+using TechSupportApp.Application.Interfaces;
 using TechSupportApp.Domain.Models;
 using TechSupportApp.Infrastructure.Persistence;
 
@@ -20,8 +20,13 @@ namespace TechSupportApp.Tests.Application
                 optionsBuilder.UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
             }
 
+            Mock<IDateTimeService> dateTimeServiceMock = GetDateTimeServMock();
+            Mock<ICurrentUserService> currentUserServiceMock = GetCurrentUserServiceMock();
 
-            var context = new ApplicationContext(optionsBuilder.Options);
+            var context = new ApplicationContext(optionsBuilder.Options,
+                currentUserServiceMock.Object,
+                dateTimeServiceMock.Object);
+
             context.Database.EnsureCreated();
             SeedData(context);
 
@@ -34,6 +39,22 @@ namespace TechSupportApp.Tests.Application
             }
 
             return context;
+
+            static Mock<IDateTimeService> GetDateTimeServMock()
+            {
+                var dateTimeServiceMock = new Mock<IDateTimeService>();
+                const string TestDate = "2018-08-18";
+                dateTimeServiceMock.Setup(m => m.Now).Returns(DateTime.Parse(TestDate));
+                return dateTimeServiceMock;
+            }
+
+            static Mock<ICurrentUserService> GetCurrentUserServiceMock()
+            {
+                var currentUserServiceMock = new Mock<ICurrentUserService>();
+                const string TestUserId = "1";
+                currentUserServiceMock.Setup(m => m.UserId).Returns(TestUserId);
+                return currentUserServiceMock;
+            }
         }
 
         private static void SeedData(ApplicationContext context)
@@ -63,6 +84,6 @@ namespace TechSupportApp.Tests.Application
         {
             context.Database.EnsureDeleted();
             context.Dispose();
-        }
+        }       
     }
 }

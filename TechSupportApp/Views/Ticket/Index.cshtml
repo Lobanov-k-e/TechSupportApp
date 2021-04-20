@@ -1,14 +1,25 @@
-﻿@model TechSupportApp.Application.Tickets.Queries.GetAllTickets.GetAllTicketsVm
-
-<table>
-    @foreach (var ticket in Model.Tickets)
-    {
-        <tr>
-            <td>@ticket.Id</td>
-            <td>@ticket.Issuer</td>
-            <td>@ticket.Issue</td>            
-            <td>@Model.TicketStatusList.First(t => t.Value == ticket.TicketStatus).Name</td>
-        </tr>
-    }
-</table>
+﻿@model TechSupportApp.Application.Tickets.Queries.GetTicketsForUser.GetTicketsForUserVm
+<div class="row">
+    <div class="col-12 pt-2">
+        <div>
+        <a asp-action="CreateTicket" class="btn btn-success float-left ">Create Ticket</a>        
+        <h3 class="text-right">Your tickets, UserName</h3>
+        </div>
+        <table id="ticket-table"class="table table-hover">  
+            <thead class="table-light">
+                <tr>
+                    <th>Issue</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            @foreach (var ticket in Model.Tickets)
+            {
+                <tr>                      
+                    <td><a asp-action="Details" asp-route-id="@ticket.Id">@ticket.Issue</a></td>            
+                    <td><a asp-action="Details" asp-route-id="@ticket.Id">@Model.TicketStatusList.First(t => t.Value == ticket.TicketStatus).Name</a></td>
+                </tr>
+            }
+        </table>
+   </div>    
+</div>
 

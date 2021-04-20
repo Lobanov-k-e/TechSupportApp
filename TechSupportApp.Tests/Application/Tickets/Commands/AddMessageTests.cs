@@ -18,11 +18,11 @@ namespace TechSupportApp.Tests.Application.Tickets.Commands
     class AddMessageTests
     {
         IAppContext _context;
-        private UserServiceFactory _userServiceFactory;        
+        private IdentityServiceFactory _userServiceFactory;        
         public AddMessageTests()
         {
             _context = DBContextFactory.Create();
-            _userServiceFactory = new UserServiceFactory();
+            _userServiceFactory = new IdentityServiceFactory();
         }
      
         [Test]

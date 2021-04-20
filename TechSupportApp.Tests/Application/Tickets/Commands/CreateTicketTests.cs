@@ -17,12 +17,12 @@ namespace TechSupportApp.Tests.Application.Tickets.Commands
     class CreateTicketTests
     {
         private ApplicationContext _context;
-        private UserServiceFactory _userServiceFactory;
+        private IdentityServiceFactory _userServiceFactory;
 
         public CreateTicketTests()
         {
             _context = DBContextFactory.Create();
-            _userServiceFactory = new UserServiceFactory();
+            _userServiceFactory = new IdentityServiceFactory();
         }
 
         [Test]

@@ -3,9 +3,7 @@ using AutoMapper.QueryableExtensions;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using TechSupportApp.Application.Common.Models;
@@ -33,13 +31,14 @@ namespace TechSupportApp.Application.Tickets.Queries.GetTicketsForUser
 
         public async Task<GetTicketsForUserVm> Handle(GetTicketsForUser request, CancellationToken cancellationToken)
         {
-            (Result result, int domainId) = await _identityService.GetDomainId(request.CurrentUserIdentity);
+            //consider high priority exception: domain id found, user not found
+            (Result result, int domainId) = await _identityService.GetDomainIdAsync(request.CurrentUserIdentity);
 
             if (!result.Succeeded)
             {
                 throw new ApplicationException(string.Concat(result.Errors));
             }
-
+            
             var tickets = await _context
                 .Tickets
                 .Where(t => t.Issuer.Id.Equals(domainId))

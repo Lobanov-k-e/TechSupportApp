@@ -12,9 +12,9 @@ using TechSupportApp.Infrastructure.Persistence;
 
 namespace TechSupportApp.Tests.Application.Common
 {
-    class UserServiceFactory
+    class IdentityServiceFactory
     {
-        public UserServiceFactory()
+        public IdentityServiceFactory()
         {
 
         }
@@ -24,7 +24,7 @@ namespace TechSupportApp.Tests.Application.Common
             return new FakeIdentityService();
         }     
     }
-    //less code than mocks переделать в  моки
+    //less code than mocks 
     class FakeIdentityService : IIdentityService
     {
         public string DomainId { get; set; }
@@ -37,7 +37,7 @@ namespace TechSupportApp.Tests.Application.Common
             throw new NotImplementedException();
         }
 
-        public async Task<(Result result, int id)> GetDomainId(string id)
+        public async Task<(Result result, int id)> GetDomainIdAsync(string id)
         {
             DomainId = id;
 

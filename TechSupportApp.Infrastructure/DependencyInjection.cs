@@ -6,6 +6,7 @@ using System;
 using TechSupportApp.Application.Interfaces;
 using TechSupportApp.Infrastructure.Identity;
 using TechSupportApp.Infrastructure.Persistence;
+using TechSupportApp.Infrastructure.Services;
 
 namespace TechSupportApp.Infrastructure
 {
@@ -29,9 +30,10 @@ namespace TechSupportApp.Infrastructure
                 .AddEntityFrameworkStores<IdentityContext>()
                 .AddDefaultTokenProviders();        
             
-            services.AddTransient<IIdentityService, IdentityService>();
-
+            
            
+            services.AddTransient<IIdentityService, IdentityService>();
+            services.AddTransient<IDateTimeService, DateTimeService>();           
         }
 
         [Obsolete("Use actual database")]

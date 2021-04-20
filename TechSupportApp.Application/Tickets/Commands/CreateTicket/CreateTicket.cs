@@ -1,6 +1,5 @@
 ﻿using MediatR;
 using System;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using TechSupportApp.Application.Common.Exceptions;
@@ -28,7 +27,7 @@ namespace TechSupportApp.Application.Tickets.Commands.CreateTicket
         }
         public async Task<int> Handle(CreateTicket request, CancellationToken cancellationToken)
         {           
-            (Result result, int domainId) = await _identityService.GetDomainId(request.UserId);
+            (Result result, int domainId) = await _identityService.GetDomainIdAsync(request.UserId);
 
             if (!result.Succeeded)
             {
